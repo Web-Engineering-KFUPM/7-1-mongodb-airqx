@@ -184,47 +184,46 @@
  *  This is the default behavior of Mongoose.
  */
 
+// import mongoose
 import mongoose from "mongoose";
 
-console.log("server started");
-
-// connect to MongoDB
+// establish connection
 mongoose.connect("mongodb+srv://airqx:100789@cluster0.degriaz.mongodb.net/TestDB")
-  .then(async () => {
-    console.log("Connected to MongoDB");
-
-    // define schema
-    const studentSchema = new mongoose.Schema({
-      name: String,
-      age: Number,
-      major: String
-    });
-
-    // create model
-    const Student = mongoose.model("Student", studentSchema);
-
-    // CREATE
-    await Student.insertMany([
-      { name: "Ali", age: 21, major: "CS" },
-      { name: "Sara", age: 23, major: "SE" }
-    ]);
-    console.log("✅ Inserted");
-
-    // READ
-    const all = await Student.find();
-    console.log(all);
-
-    // UPDATE
-    await Student.updateOne({ name: "Ali" }, { age: 22 });
-    console.log("✅ Updated Ali");
-
-    // DELETE
-    await Student.deleteOne({ name: "Sara" });
-    console.log("✅ Deleted Sara");
-
-    // FINAL CHECK
-    const final = await Student.find();
-    console.log(final);
-
-  })
+  .then(() => console.log("Connected to MongoDB"))
   .catch((err) => console.log(err));
+
+// define schema
+const studentSchema = new mongoose.Schema({
+  name: String,
+  age: Number,
+  major: String
+});
+
+const Student = mongoose.model("Student", studentSchema);
+
+// create document
+async function createStudents() {
+  await Student.insertMany([
+    { name: "Ali", age: 21, major: "CS" },
+    { name: "Sara", age: 23, major: "SE" }
+  ]);
+  console.log("✅ Inserted");
+}
+
+// read document
+async function readStudents() {
+  const all = await Student.find();
+  console.log(all);
+}
+
+// update document
+async function updateStudent() {
+  await Student.updateOne({ name: "Ali" }, { age: 22 });
+  console.log("✅ Updated Ali");
+}
+
+// delete document
+async function deleteStudent() {
+  await Student.deleteOne({ name: "Sara" });
+  console.log("✅ Deleted Sara");
+}
